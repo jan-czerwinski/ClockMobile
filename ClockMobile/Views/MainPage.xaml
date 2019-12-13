@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ClockMobile.Views.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:prism="http://prismlibrary.com"
+    Title="{Binding Title}"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    BackgroundColor="AliceBlue"
+    NavigationPage.HasNavigationBar="False">
+
+    <StackLayout
+        Padding="10"
+        HorizontalOptions="FillAndExpand"
+        Spacing="100">
+
+        <StackLayout>
+            <Label HorizontalOptions="CenterAndExpand" Text="Jasność: " />
+            <Slider
+                Maximum="255"
+                Minimum="1"
+                Value="{Binding Clock.Brightness.Day}">
+                <Slider.Behaviors>
+                    <b:EventToCommandBehavior Command="{Binding SendBrightnessCommand}" EventName="DragCompleted" />
+                </Slider.Behaviors>
+            </Slider>
+            <StackLayout Orientation="Horizontal">
+                <Label
+                    HorizontalOptions="FillAndExpand"
+                    Text="Tryb nocny"
+                    VerticalOptions="CenterAndExpand" />
+                <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.Brightness.NightMode}" />
+            </StackLayout>
+            <StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <TimePicker HorizontalOptions="FillAndExpand" Time="{Binding Clock.Brightness.StartTime}" />
+                    <TimePicker HorizontalOptions="FillAndExpand" Time="{Binding Clock.Brightness.EndTime}" />
+                </StackLayout>
+                <Slider
+                    Maximum="255"
+                    Minimum="1"
+                    Value="{Binding Clock.Brightness.Night}">
+                    <Slider.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding SendBrightnessCommand}" EventName="DragCompleted" />
+                    </Slider.Behaviors>
+                </Slider>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout HorizontalOptions="FillAndExpand">
+            <Label HorizontalOptions="CenterAndExpand" Text="Kolor:" />
+            <BoxView Color="{Binding Clock.Color.HexColor}" />
+            <StackLayout Orientation="Horizontal">
+                <Label Text="R:" TextColor="Red" />
+                <Slider
+                    HorizontalOptions="FillAndExpand"
+                    Maximum="255"
+                    Value="{Binding Clock.Color.R}" />
+            </StackLayout>
+            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                <Label Text="G:" TextColor="Green" />
+                <Slider
+                    HorizontalOptions="FillAndExpand"
+                    Maximum="255"
+                    Value="{Binding Clock.Color.G}">
+                    <Slider.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding SendColorCommand}" EventName="DragCompleted" />
+                    </Slider.Behaviors>
+                </Slider>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="B:" TextColor="Blue" />
+                <Slider
+                    HorizontalOptions="FillAndExpand"
+                    Maximum="255"
+                    Value="{Binding Clock.Color.B}" />
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label
+                HorizontalOptions="FillAndExpand"
+                Text="Włącz/Wyłącz"
+                VerticalOptions="CenterAndExpand" />
+            <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.On}" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Button Command="{Binding SendBrightnessCommand}" Text="Ustaw" />
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

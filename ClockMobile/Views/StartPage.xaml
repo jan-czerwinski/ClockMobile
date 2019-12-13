@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ClockMobile.Views.StartPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:prism="http://prismlibrary.com"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    BackgroundColor="AliceBlue"
+    NavigationPage.HasNavigationBar="False">
+
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <ActivityIndicator IsRunning="{Binding IsActivityIndicatorRunning}" Color="Pink" />
+        <Label Text="{Binding IsActivityIndicatorRunning}" />
+        <Button
+            BackgroundColor="#fad7ee"
+            BorderColor="Black"
+            BorderRadius="10"
+            BorderWidth="2"
+            Command="{Binding StartCommand}"
+            Text="połącz z zegarem"
+            TextColor="Black" />
+    </StackLayout>
+</ContentPage>
