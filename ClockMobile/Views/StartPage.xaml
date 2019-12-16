@@ -7,17 +7,19 @@
     prism:ViewModelLocator.AutowireViewModel="True"
     BackgroundColor="AliceBlue"
     NavigationPage.HasNavigationBar="False">
-
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <ActivityIndicator IsRunning="{Binding IsActivityIndicatorRunning}" Color="Pink" />
-        <Label Text="{Binding IsActivityIndicatorRunning}" />
-        <Button
-            BackgroundColor="#fad7ee"
-            BorderColor="Black"
-            BorderRadius="10"
-            BorderWidth="2"
-            Command="{Binding StartCommand}"
-            Text="połącz z zegarem"
-            TextColor="Black" />
+        <Grid>
+            <ActivityIndicator IsRunning="{Binding IsActivityIndicatorRunning}" Color="Pink" />
+            <Button
+                BackgroundColor="#fad7ee"
+                BorderColor="Black"
+                BorderRadius="10"
+                BorderWidth="2"
+                Command="{Binding StartCommand}"
+                IsVisible="{Binding IsButtonVisible}"
+                Text="połącz z zegarem"
+                TextColor="Black" />
+
+        </Grid>
     </StackLayout>
 </ContentPage>

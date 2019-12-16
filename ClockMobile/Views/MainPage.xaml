@@ -30,12 +30,16 @@
                     HorizontalOptions="FillAndExpand"
                     Text="Tryb nocny"
                     VerticalOptions="CenterAndExpand" />
-                <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.Brightness.NightMode}" />
+                <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.Brightness.NightMode}">
+                    <Switch.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding SendBrightnessCommand}" EventName="Toggled" />
+                    </Switch.Behaviors>
+                </Switch>
             </StackLayout>
             <StackLayout>
                 <StackLayout Orientation="Horizontal">
-                    <TimePicker HorizontalOptions="FillAndExpand" Time="{Binding Clock.Brightness.StartTime}" />
-                    <TimePicker HorizontalOptions="FillAndExpand" Time="{Binding Clock.Brightness.EndTime}" />
+                    <TimePicker HorizontalOptions="FillAndExpand" Time="{Binding StartTime}" />
+                    <TimePicker HorizontalOptions="FillAndExpand" Time="{Binding EndTime}" />
                 </StackLayout>
                 <Slider
                     Maximum="255"
@@ -56,26 +60,38 @@
                 <Slider
                     HorizontalOptions="FillAndExpand"
                     Maximum="255"
-                    Value="{Binding Clock.Color.R}" />
+                    Minimum="0"
+                    Value="{Binding Clock.Color.R}">
+                    <Slider.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding SendColorCommand}" EventName="DragCompleted" />
+                    </Slider.Behaviors>
+                </Slider>
             </StackLayout>
             <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                 <Label Text="G:" TextColor="Green" />
                 <Slider
                     HorizontalOptions="FillAndExpand"
                     Maximum="255"
+                    Minimum="0"
                     Value="{Binding Clock.Color.G}">
                     <Slider.Behaviors>
                         <b:EventToCommandBehavior Command="{Binding SendColorCommand}" EventName="DragCompleted" />
                     </Slider.Behaviors>
                 </Slider>
             </StackLayout>
-            <StackLayout Orientation="Horizontal">
+            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                 <Label Text="B:" TextColor="Blue" />
                 <Slider
                     HorizontalOptions="FillAndExpand"
                     Maximum="255"
-                    Value="{Binding Clock.Color.B}" />
+                    Minimum="0"
+                    Value="{Binding Clock.Color.B}">
+                    <Slider.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding SendColorCommand}" EventName="DragCompleted" />
+                    </Slider.Behaviors>
+                </Slider>
             </StackLayout>
+
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
@@ -83,7 +99,11 @@
                 HorizontalOptions="FillAndExpand"
                 Text="Włącz/Wyłącz"
                 VerticalOptions="CenterAndExpand" />
-            <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.On}" />
+            <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.On}">
+                <Switch.Behaviors>
+                    <b:EventToCommandBehavior Command="{Binding SendSwitchCommand}" EventName="Toggled" />
+                </Switch.Behaviors>
+            </Switch>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Button Command="{Binding SendBrightnessCommand}" Text="Ustaw" />

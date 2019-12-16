@@ -11,7 +11,9 @@ using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -45,7 +47,15 @@ namespace ClockMobile.ViewModels
         public bool IsActivityIndicatorRunning
         {
             get { return  _activityIndicatorVisibility; }
-            set { SetProperty(ref _activityIndicatorVisibility, value); }
+            set {
+                IsButtonVisible = !value;
+                SetProperty(ref _activityIndicatorVisibility, value); }
+        }
+        private bool _isButtonVisible = true;
+        public bool IsButtonVisible
+        {
+            get { return _isButtonVisible; }
+            set { SetProperty(ref _isButtonVisible, value); }
         }
     
         public StartPageViewModel(INavigationService navigationService) : base(navigationService)
@@ -107,23 +117,11 @@ namespace ClockMobile.ViewModels
                 BrightnessCharacteristic = await Service.GetCharacteristicAsync(Constants.BrightnessGuid);
                 ColorCharacteristic = await Service.GetCharacteristicAsync(Constants.ColorGuid);
                 TimeCharacteristic = await Service.GetCharacteristicAsync(Constants.TimeGuid);
-                var result = await ColorCharacteristic.ReadAsync();
-                //TODO set time here
 
+                await TimeCharacteristic.WriteAsync(BitConverter.GetBytes(Convert.ToInt32(DateTime.Now.ToString("ddMMHHmm"))));
 
-                Clock = new ClockModel()
-                {
-                    On = true,
-                    Brightness = new BrightnessSettings()
-                    {
-                        Day = 100.0,
-                        NightMode = false,
-                        Night = 100,
-                        StartTime = new TimeSpan(2, 14, 18),
-                        EndTime = new TimeSpan(2, 14, 18)
-                    },
-                    Color = new ColorSettings() { R = 100, G = 0, B = 200 }
-                };
+                await GetClock();
+                
                 await NavigateToMainPage();
             }
             catch (DeviceConnectionException e)
@@ -137,11 +135,6 @@ namespace ClockMobile.ViewModels
         {
             var navigationParams = new NavigationParameters
             {
-                { "Ble", Ble },
-                { "Adapter", Adapter },
-                { "BleDevice", BleDevice },
-                { "Service", Service },
-
                 { "Clock", Clock },
                 { "SwitchCharacteristic", SwitchCharacteristic },
                 { "BrightnessCharacteristic", BrightnessCharacteristic },
@@ -149,6 +142,32 @@ namespace ClockMobile.ViewModels
             };
 
             await _navigationService.NavigateAsync("MainPage", navigationParams);
+        }
+
+        private async Task GetClock()
+        {
+            var switchResult = await SwitchCharacteristic.ReadAsync();
+            var colorResult = await ColorCharacteristic.ReadAsync();
+            var brightnessResult = await BrightnessCharacteristic.ReadAsync();
+
+            var color = BitConverter.ToInt32(colorResult, 0);
+            //var brightness = Encoding.UTF8.GetString(brightnessResult); 
+
+            Clock = new ClockModel()
+            {
+                On = Convert.ToBoolean(switchResult[0]),
+                /*Brightness = new BrightnessSettings()
+                {
+                    Day = Convert.ToDouble(brightness.Substring(0,3)),
+                    NightMode = brightness[3] == '1' ? true : false,
+                    Night = Convert.ToDouble(brightness.Substring(4, 3)),
+                    StartTime = new TimeSpan(Convert.ToInt32(brightness.Substring(7, 2)), Convert.ToInt32(brightness.Substring(9, 2)), 00),
+                    EndTime = new TimeSpan(Convert.ToInt32( brightness.Substring(11, 2)), Convert.ToInt32(brightness.Substring(13, 2)), 00) 
+                },
+                */
+                Brightness = new BrightnessSettings(),
+                Color = new ColorSettings() { R = color/1000000, G = (color% 1000000)/1000, B = color%1000 }
+            };
         }
     }
 }

@@ -25,9 +25,7 @@ namespace ClockMobile.Models
         public double Day { get => day; set => SetProperty(ref day, value); }
         public bool NightMode { get => nightMode; set => SetProperty(ref nightMode, value); }
         public double Night { get => night; set => SetProperty(ref night, value); }
-        public TimeSpan StartTime { 
-            get => startTime; 
-            set => SetProperty(ref startTime, value); } 
+        public TimeSpan StartTime{ get => startTime; set => SetProperty(ref startTime, value);}
         public TimeSpan EndTime { get => endTime; set => SetProperty(ref endTime, value); }
         public string ToSend => Compress();
         private string Compress()
@@ -79,9 +77,25 @@ namespace ClockMobile.Models
             }
         }
 
-        private Color ToHex => Color.FromArgb((int)R, (int)G, (int)B);
+        private Color ToHex => ToBoxMaxRgbBrightness(R, G, B);
         public Color HexColor { get => hexColor; set => SetProperty(ref hexColor, value); }
+        public int ToSend => ToSendMaxRgbBrightness(R,G,B);
 
-        public int ToSend => (int)R * 1000000 + (int)G * 1000 + (int)B;
+        private int ToSendMaxRgbBrightness(double r, double g, double b)
+        {
+            double multiplier =255.0/ Math.Max(r, Math.Max(g, b));
+            r *= multiplier;
+            g *= multiplier;
+            b *= multiplier;
+            return (int)r * 1000000 + (int)g * 1000 + (int)b;
+        }
+        private Color ToBoxMaxRgbBrightness(double r, double g, double b)
+        {
+            double multiplier = 255.0 / Math.Max(r, Math.Max(g, b));
+            r *= multiplier;
+            g *= multiplier;
+            b *= multiplier;
+            return Color.FromArgb((int)r, (int)g, (int)b);
+        }
     }
 }

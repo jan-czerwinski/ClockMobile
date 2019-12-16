@@ -18,17 +18,37 @@ namespace ClockMobile.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        private IBluetoothLE Ble { get; set; }
-        private IAdapter Adapter { get; set; }
-        private IDevice BleDevice { get; set; }
-        private IService Service { get; set; }
         private ICharacteristic SwitchCharacteristic { get; set; }
         private ICharacteristic BrightnessCharacteristic { get; set; }
         private ICharacteristic ColorCharacteristic { get; set; }
-        private ICharacteristic TimeCharacteristic { get; set; }
         public DelegateCommand SendSwitchCommand { get; private set; }
         public DelegateCommand SendBrightnessCommand { get; private set; }
         public DelegateCommand SendColorCommand { get; private set; }
+        
+        
+        private TimeSpan _startTime;
+        public TimeSpan StartTime { 
+            get { return _startTime; } 
+            set 
+            {    
+                SetProperty(ref _startTime, value);
+                Clock.Brightness.StartTime = value;
+                new Task(SendBrightness).Start();
+            } 
+        }
+
+        private TimeSpan _endTime;
+        public TimeSpan EndTime
+        {
+            get { return _endTime; }
+            set
+            {
+                SetProperty(ref _endTime, value);
+                Clock.Brightness.EndTime = value;
+                new Task(SendBrightness).Start();
+            }
+        }
+
 
         private ClockModel _clock;
         public ClockModel Clock
@@ -50,14 +70,12 @@ namespace ClockMobile.ViewModels
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            Ble = parameters.GetValue<IBluetoothLE>("Ble");
-            Adapter = parameters.GetValue<IAdapter>("Adapter");
-            BleDevice = parameters.GetValue<IDevice>("BleDevice");
-            Service = parameters.GetValue<IService>("Service");
             SwitchCharacteristic = parameters.GetValue<ICharacteristic>("SwitchCharacteristic");
             BrightnessCharacteristic = parameters.GetValue<ICharacteristic>("BrightnessCharacteristic");
             ColorCharacteristic = parameters.GetValue<ICharacteristic>("ColorCharacteristic");
             Clock = parameters.GetValue<ClockModel>("Clock");
+            StartTime = Clock.Brightness.StartTime;
+            EndTime = Clock.Brightness.EndTime;
         }
 
         private bool sendingSomething = false;
