@@ -5,21 +5,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:prism="http://prismlibrary.com"
     prism:ViewModelLocator.AutowireViewModel="True"
-    BackgroundColor="AliceBlue"
+    BackgroundColor="#90e1ff"
     NavigationPage.HasNavigationBar="False">
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <Grid>
-            <ActivityIndicator IsRunning="{Binding IsActivityIndicatorRunning}" Color="Pink" />
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <ActivityIndicator
+                AbsoluteLayout.LayoutBounds=".5,.5,100,100"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                IsRunning="{Binding IsActivityIndicatorRunning}" />
             <Button
-                BackgroundColor="#fad7ee"
-                BorderColor="Black"
-                BorderRadius="10"
-                BorderWidth="2"
+                AbsoluteLayout.LayoutBounds=".5,.5,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="#90e1ff"
                 Command="{Binding StartCommand}"
                 IsVisible="{Binding IsButtonVisible}"
                 Text="połącz z zegarem"
                 TextColor="Black" />
-
-        </Grid>
-    </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
 </ContentPage>

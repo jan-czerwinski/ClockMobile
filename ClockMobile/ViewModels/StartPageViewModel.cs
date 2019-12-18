@@ -33,6 +33,8 @@ namespace ClockMobile.ViewModels
         private ICharacteristic BrightnessCharacteristic { get; set; }
         private ICharacteristic ColorCharacteristic { get; set; }
         private ICharacteristic TimeCharacteristic { get; set; }
+        private ICharacteristic SnakeCharacteristic { get; set; }
+
 
         private readonly IPermissions permissions;
         private readonly IUserDialogs userDialogs;
@@ -57,10 +59,11 @@ namespace ClockMobile.ViewModels
             get { return _isButtonVisible; }
             set { SetProperty(ref _isButtonVisible, value); }
         }
-    
+        private readonly CancellationTokenSource cts;
         public StartPageViewModel(INavigationService navigationService) : base(navigationService)
         {
             Title = "START PAGE";
+            cts = new CancellationTokenSource();// stops trying to connect after 10 seconds
             _navigationService = navigationService;
             Ble = CrossBluetoothLE.Current;
             Adapter = CrossBluetoothLE.Current.Adapter;
@@ -111,12 +114,14 @@ namespace ClockMobile.ViewModels
         {
             try
             {
-                BleDevice = await Adapter.ConnectToKnownDeviceAsync(Constants.DeviceGuid); //TODO add cancellation token
-                Service = await BleDevice.GetServiceAsync(Constants.ServiceGuid);
-                SwitchCharacteristic = await Service.GetCharacteristicAsync(Constants.SwitchGuid);
-                BrightnessCharacteristic = await Service.GetCharacteristicAsync(Constants.BrightnessGuid);
-                ColorCharacteristic = await Service.GetCharacteristicAsync(Constants.ColorGuid);
-                TimeCharacteristic = await Service.GetCharacteristicAsync(Constants.TimeGuid);
+                BleDevice = await Adapter.ConnectToKnownDeviceAsync(Guids.DeviceGuid, cancellationToken: cts.Token);
+                Service = await BleDevice.GetServiceAsync(Guids.ServiceGuid);
+                SwitchCharacteristic = await Service.GetCharacteristicAsync(Guids.SwitchGuid);
+                BrightnessCharacteristic = await Service.GetCharacteristicAsync(Guids.BrightnessGuid);
+                ColorCharacteristic = await Service.GetCharacteristicAsync(Guids.ColorGuid);
+                TimeCharacteristic = await Service.GetCharacteristicAsync(Guids.TimeGuid);
+                SnakeCharacteristic = await Service.GetCharacteristicAsync(Guids.SnakeGuid);
+
 
                 await TimeCharacteristic.WriteAsync(BitConverter.GetBytes(Convert.ToInt32(DateTime.Now.ToString("ddMMHHmm"))));
 
@@ -138,7 +143,9 @@ namespace ClockMobile.ViewModels
                 { "Clock", Clock },
                 { "SwitchCharacteristic", SwitchCharacteristic },
                 { "BrightnessCharacteristic", BrightnessCharacteristic },
-                { "ColorCharacteristic", ColorCharacteristic }
+                { "ColorCharacteristic", ColorCharacteristic },
+                { "SnakeCharacteristic", SnakeCharacteristic },
+
             };
 
             await _navigationService.NavigateAsync("MainPage", navigationParams);
@@ -148,24 +155,23 @@ namespace ClockMobile.ViewModels
         {
             var switchResult = await SwitchCharacteristic.ReadAsync();
             var colorResult = await ColorCharacteristic.ReadAsync();
-            var brightnessResult = await BrightnessCharacteristic.ReadAsync();
+            var brightness = await BrightnessCharacteristic.ReadAsync();
 
             var color = BitConverter.ToInt32(colorResult, 0);
-            //var brightness = Encoding.UTF8.GetString(brightnessResult); 
 
             Clock = new ClockModel()
             {
                 On = Convert.ToBoolean(switchResult[0]),
-                /*Brightness = new BrightnessSettings()
+                Brightness = new BrightnessSettings()
                 {
-                    Day = Convert.ToDouble(brightness.Substring(0,3)),
-                    NightMode = brightness[3] == '1' ? true : false,
-                    Night = Convert.ToDouble(brightness.Substring(4, 3)),
-                    StartTime = new TimeSpan(Convert.ToInt32(brightness.Substring(7, 2)), Convert.ToInt32(brightness.Substring(9, 2)), 00),
-                    EndTime = new TimeSpan(Convert.ToInt32( brightness.Substring(11, 2)), Convert.ToInt32(brightness.Substring(13, 2)), 00) 
+                    Day = Convert.ToDouble(String.Format("{0}{1}{2}", brightness[0], brightness[1], brightness[2])),
+                    NightMode = String.Format("{0}", brightness[3]) == "1" ? true : false,
+                    Night = Convert.ToDouble(String.Format("{0}{1}{2}", brightness[4], brightness[5], brightness[6])),
+                    StartTime = new TimeSpan(Convert.ToInt32(String.Format("{0}{1}", brightness[7], brightness[8])),
+                                            Convert.ToInt32(String.Format("{0}{1}", brightness[9], brightness[10])), 00),
+                    EndTime = new TimeSpan(Convert.ToInt32(String.Format("{0}{1}", brightness[11], brightness[12])),
+                                            Convert.ToInt32(String.Format("{0}{1}", brightness[13], brightness[14])), 00),
                 },
-                */
-                Brightness = new BrightnessSettings(),
                 Color = new ColorSettings() { R = color/1000000, G = (color% 1000000)/1000, B = color%1000 }
             };
         }

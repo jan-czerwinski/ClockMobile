@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClockMobile
 {
-    public static class Constants
+    public static class Guids
     {
         public static readonly Guid DeviceGuid = new Guid("00000000-0000-0000-0000-b827ebf4860a");
         public static readonly Guid ServiceGuid = new Guid("3cefb000-82c1-4929-8021-6d793424227c");
@@ -12,5 +12,14 @@ namespace ClockMobile
         public static readonly Guid BrightnessGuid = new Guid("3cefb002-82c1-4929-8021-6d793424227c");
         public static readonly Guid ColorGuid = new Guid("3cefb003-82c1-4929-8021-6d793424227c");
         public static readonly Guid TimeGuid = new Guid("3cefb004-82c1-4929-8021-6d793424227c");
+        public static readonly Guid SnakeGuid = new Guid("3cefb005-82c1-4929-8021-6d793424227c");
+
+    }
+    public static class Snake
+    {
+        public static readonly byte[] Start = { 20 };
+        public static readonly byte[] Stop = { 40 };
+        public static readonly byte[] Right = { 1 };
+        public static readonly byte[] Left = {0};
     }
 }

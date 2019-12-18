@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ClockMobile.Views.SnakePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:prism="http://prismlibrary.com"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    BackgroundColor="#90e1ff"
+    NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+
+        <AbsoluteLayout>
+            <Button
+                AbsoluteLayout.LayoutBounds=".06,0.02,0.6,0.4"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="#ff90e1"
+                BorderColor="Black"
+                BorderRadius="10"
+                BorderWidth="1"
+                Command="{Binding TurnLeftCommand}" />
+            <Button
+                AbsoluteLayout.LayoutBounds=".06,.98,0.6,0.4"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="#ff90e1"
+                BorderColor="Black"
+                BorderRadius="10"
+                BorderWidth="1"
+                Command="{Binding TurnRightCommand}" />
+
+            <Button
+                AbsoluteLayout.LayoutBounds=".95,.5,.3,.1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="#ff90e1"
+                BorderColor="Black"
+                BorderRadius="10"
+                BorderWidth="1"
+                Rotation="90"
+                Text="wyjdz" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

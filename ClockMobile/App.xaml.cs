@@ -37,6 +37,7 @@ namespace ClockMobile
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StartPage, StartPageViewModel>();
+            containerRegistry.RegisterForNavigation<SnakePage, SnakePageViewModel>();
         }
     }
 }
