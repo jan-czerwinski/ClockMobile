@@ -34,7 +34,7 @@
                 TextColor="Black" />
 
             <Button
-                AbsoluteLayout.LayoutBounds=".95,.5,.3,.1"
+                AbsoluteLayout.LayoutBounds=".95,.4,.2,.1"
                 AbsoluteLayout.LayoutFlags="All"
                 BackgroundColor="#ff9f8c"
                 BorderColor="Black"
@@ -44,6 +44,21 @@
                 Rotation="90"
                 Text="wyjdz"
                 TextColor="Black" />
+
+            <Button
+                AbsoluteLayout.LayoutBounds=".95,.6,.2,.1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="#ff9f8c"
+                BorderColor="Black"
+                BorderRadius="10"
+                BorderWidth="1"
+                Command="{Binding ResetSnakeCommand}"
+                HorizontalOptions="EndAndExpand"
+                Rotation="90"
+                Text="reset"
+                TextColor="Black"
+                VerticalOptions="FillAndExpand" />
+
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

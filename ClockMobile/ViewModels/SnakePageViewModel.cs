@@ -13,12 +13,13 @@ namespace ClockMobile.ViewModels
     public class SnakePageViewModel : ViewModelBase, IApplicationLifecycleAware
     {
         private INavigationService _navigationService;
-        private INavigationParameters saveParameters;
         private ICharacteristic SnakeCharacteristic { get; set; }
         private ICharacteristic SwitchCharacteristic { get; set; }
         public DelegateCommand TurnRightCommand { get; private set; }
         public DelegateCommand TurnLeftCommand { get; private set; }
         public DelegateCommand StopSnakeCommand { get; private set; }
+        public DelegateCommand ResetSnakeCommand { get; private set; }
+
 
         private bool turning;
         public SnakePageViewModel(INavigationService navigationService)
@@ -29,6 +30,8 @@ namespace ClockMobile.ViewModels
             TurnRightCommand = new DelegateCommand(TurnRight);
             TurnLeftCommand = new DelegateCommand(TurnLeft);
             StopSnakeCommand = new DelegateCommand(StopSnake);
+            ResetSnakeCommand = new DelegateCommand(ResetSnake);
+
 
         }
         private async void TurnRight() { await Turn(true); }
@@ -47,7 +50,6 @@ namespace ClockMobile.ViewModels
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            saveParameters = parameters;
             SnakeCharacteristic = parameters.GetValue<ICharacteristic>("SnakeCharacteristic");
             SwitchCharacteristic = parameters.GetValue<ICharacteristic>("SwitchCharacteristic");
         }
@@ -60,18 +62,25 @@ namespace ClockMobile.ViewModels
             }
             catch
             {
-                await _navigationService.NavigateAsync("StartPage");
+                await _navigationService.GoBackToRootAsync();
             }
+        }
+
+        private async void ResetSnake()
+        {
+            await SnakeCharacteristic.WriteAsync(Snake.Stop);
+            await SnakeCharacteristic.WriteAsync(Snake.Start);
         }
         private async void StopSnake()
         { 
             await SnakeCharacteristic.WriteAsync(Snake.Stop);
-            await _navigationService.NavigateAsync("MainPage",saveParameters);
+            await _navigationService.GoBackToRootAsync();
+            
         }
         public async void OnSleep()
         {
             await SnakeCharacteristic.WriteAsync(Snake.Stop);
-            await _navigationService.NavigateAsync("MainPage",saveParameters);
+            await _navigationService.GoBackToRootAsync();
         }
     }
 }

@@ -73,7 +73,6 @@ namespace ClockMobile.ViewModels
             StartCommand = new DelegateCommand(Start);
         
         }
-
         private async void Start()
         {
             IsActivityIndicatorRunning = true;
@@ -112,29 +111,36 @@ namespace ClockMobile.ViewModels
 
         private async Task Connect()
         {
-            try
+            var deviceGuid = Device.RuntimePlatform == Device.Android ? Guids.DeviceOnAndroidGuid : Guids.DeviceOnIosGuid;
+            if (Adapter.ConnectedDevices.Any(connectedDevice => connectedDevice.Id == deviceGuid))
             {
-                cts.CancelAfter(10000);
-                var deviceGuid = Device.RuntimePlatform == Device.Android ? Guids.DeviceOnAndroidGuid : Guids.DeviceOnIosGuid;
-                BleDevice = await Adapter.ConnectToKnownDeviceAsync(deviceGuid, cancellationToken: cts.Token);
-                Service = await BleDevice.GetServiceAsync(Guids.ServiceGuid);
-                SwitchCharacteristic = await Service.GetCharacteristicAsync(Guids.SwitchGuid);
-                BrightnessCharacteristic = await Service.GetCharacteristicAsync(Guids.BrightnessGuid);
-                ColorCharacteristic = await Service.GetCharacteristicAsync(Guids.ColorGuid);
-                TimeCharacteristic = await Service.GetCharacteristicAsync(Guids.TimeGuid);
-                SnakeCharacteristic = await Service.GetCharacteristicAsync(Guids.SnakeGuid);
-
-
-                await TimeCharacteristic.WriteAsync(BitConverter.GetBytes(Convert.ToInt32(DateTime.Now.ToString("ddMMHHmm"))));
-
-                await GetClock();
-                
                 await NavigateToMainPage();
             }
-            catch (Exception e)
+            else
             {
-                Debug.WriteLine(e);
-                await userDialogs.AlertAsync("Nie można połączyć z zegarem.");
+                try
+                {
+                    cts.CancelAfter(10000);
+                    BleDevice = await Adapter.ConnectToKnownDeviceAsync(deviceGuid, cancellationToken: cts.Token);
+                    Service = await BleDevice.GetServiceAsync(Guids.ServiceGuid);
+                    SwitchCharacteristic = await Service.GetCharacteristicAsync(Guids.SwitchGuid);
+                    BrightnessCharacteristic = await Service.GetCharacteristicAsync(Guids.BrightnessGuid);
+                    ColorCharacteristic = await Service.GetCharacteristicAsync(Guids.ColorGuid);
+                    TimeCharacteristic = await Service.GetCharacteristicAsync(Guids.TimeGuid);
+                    SnakeCharacteristic = await Service.GetCharacteristicAsync(Guids.SnakeGuid);
+
+
+                    await TimeCharacteristic.WriteAsync(BitConverter.GetBytes(Convert.ToInt32(DateTime.Now.ToString("ddMMHHmm"))));
+
+                    await GetClock();
+                
+                    await NavigateToMainPage();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    await userDialogs.AlertAsync("Nie można połączyć z zegarem.");
+                }
             }
         }
 
