@@ -12,6 +12,7 @@ namespace ClockMobile.ViewModels
     public class MainPageViewModel : ViewModelBase, IApplicationLifecycleAware
     {
         private readonly INavigationService _navigationService;
+        private INavigationParameters saveParameters;
         private ICharacteristic SwitchCharacteristic { get; set; }
         private ICharacteristic BrightnessCharacteristic { get; set; }
         private ICharacteristic ColorCharacteristic { get; set; }
@@ -79,6 +80,7 @@ namespace ClockMobile.ViewModels
         private bool clockExists = false;
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
+            saveParameters = parameters;
             SwitchCharacteristic = parameters.GetValue<ICharacteristic>("SwitchCharacteristic");
             BrightnessCharacteristic = parameters.GetValue<ICharacteristic>("BrightnessCharacteristic");
             ColorCharacteristic = parameters.GetValue<ICharacteristic>("ColorCharacteristic");
@@ -123,7 +125,8 @@ namespace ClockMobile.ViewModels
         {
 
             await SnakeCharacteristic.WriteAsync(Snake.Start);
-            var navigationParams = new NavigationParameters {{ "SnakeCharacteristic", SnakeCharacteristic }};
+            var navigationParams = saveParameters;
+            navigationParams.Add("SnakeCharacteristic", SnakeCharacteristic);
             await _navigationService.NavigateAsync("SnakePage", navigationParams );
         }
 

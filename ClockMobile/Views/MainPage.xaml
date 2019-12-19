@@ -7,17 +7,17 @@
     xmlns:prism="http://prismlibrary.com"
     Title="{Binding Title}"
     prism:ViewModelLocator.AutowireViewModel="True"
-    BackgroundColor="#90e1ff"
+    BackgroundColor="#7fb4ff"
     NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
 
         <AbsoluteLayout>
-            
-                <StackLayout AbsoluteLayout.LayoutBounds="0,0.05,1,0.35" AbsoluteLayout.LayoutFlags="All">
+
+            <StackLayout AbsoluteLayout.LayoutBounds="0,0.05,1,0.35" AbsoluteLayout.LayoutFlags="All">
                 <Label HorizontalOptions="CenterAndExpand" Text="Jasność: " />
                 <Slider
                     Maximum="255"
-                    Minimum="1"
+                    Minimum="2"
                     Value="{Binding Clock.Brightness.Day}">
                     <Slider.Behaviors>
                         <b:EventToCommandBehavior Command="{Binding SendBrightnessCommand}" EventName="DragCompleted" />
@@ -41,7 +41,7 @@
                     </StackLayout>
                     <Slider
                         Maximum="255"
-                        Minimum="1"
+                        Minimum="2"
                         Value="{Binding Clock.Brightness.Night}">
                         <Slider.Behaviors>
                             <b:EventToCommandBehavior Command="{Binding SendBrightnessCommand}" EventName="DragCompleted" />
@@ -51,11 +51,14 @@
             </StackLayout>
 
             <StackLayout
-                AbsoluteLayout.LayoutFlags="All"
                 AbsoluteLayout.LayoutBounds="1,.5,1,0.35"
+                AbsoluteLayout.LayoutFlags="All"
                 HorizontalOptions="FillAndExpand">
                 <Label HorizontalOptions="CenterAndExpand" Text="Kolor:" />
-                <Grid Padding="1" BackgroundColor="Black" HeightRequest="50">
+                <Grid
+                    Padding="1"
+                    BackgroundColor="Black"
+                    HeightRequest="50">
                     <BoxView HeightRequest="50" Color="{Binding Clock.Color.HexColor}" />
                 </Grid>
                 <StackLayout Orientation="Horizontal">
@@ -95,17 +98,17 @@
                     </Slider>
                 </StackLayout>
             </StackLayout>
-            
+
 
             <StackLayout AbsoluteLayout.LayoutBounds="1,.85,1,0.1" AbsoluteLayout.LayoutFlags="All">
                 <Button
-                    BackgroundColor="#ff90e1"
+                    BackgroundColor="#ff9f8c"
                     BorderColor="Black"
                     BorderRadius="10"
                     BorderWidth="1"
                     Command="{Binding PlaySnakeCommand}"
-                    TextColor="Black"
-                    Text="zagraj w węża" />
+                    Text="zagraj w węża"
+                    TextColor="Black" />
             </StackLayout>
 
             <StackLayout
@@ -116,7 +119,7 @@
                     HorizontalOptions="FillAndExpand"
                     Text="Włącz/Wyłącz"
                     VerticalOptions="CenterAndExpand" />
-                <Switch IsToggled="{Binding Clock.On}" HorizontalOptions="End">
+                <Switch HorizontalOptions="End" IsToggled="{Binding Clock.On}">
                     <Switch.Behaviors>
                         <b:EventToCommandBehavior Command="{Binding SendSwitchCommand}" EventName="Toggled" />
                     </Switch.Behaviors>
