@@ -54,6 +54,7 @@
                 BorderWidth="1"
                 Command="{Binding ResetSnakeCommand}"
                 HorizontalOptions="EndAndExpand"
+                IsEnabled="{Binding CanResetSnake}"
                 Rotation="90"
                 Text="reset"
                 TextColor="Black"

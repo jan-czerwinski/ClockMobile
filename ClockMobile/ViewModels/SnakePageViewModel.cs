@@ -20,8 +20,15 @@ namespace ClockMobile.ViewModels
         public DelegateCommand StopSnakeCommand { get; private set; }
         public DelegateCommand ResetSnakeCommand { get; private set; }
 
+        private bool _canResetSnake;
+        public bool CanResetSnake
+        { 
+            get => _canResetSnake;
+            set => SetProperty(ref _canResetSnake, value);
+        }
 
         private bool turning;
+
         public SnakePageViewModel(INavigationService navigationService)
             : base(navigationService)
         {
@@ -31,6 +38,7 @@ namespace ClockMobile.ViewModels
             TurnLeftCommand = new DelegateCommand(TurnLeft);
             StopSnakeCommand = new DelegateCommand(StopSnake);
             ResetSnakeCommand = new DelegateCommand(ResetSnake);
+            CanResetSnake = true;
 
 
         }
@@ -68,8 +76,12 @@ namespace ClockMobile.ViewModels
 
         private async void ResetSnake()
         {
+            CanResetSnake = false;
             await SnakeCharacteristic.WriteAsync(Snake.Stop);
+            await Task.Delay(610);
             await SnakeCharacteristic.WriteAsync(Snake.Start);
+            CanResetSnake = true;
+
         }
         private async void StopSnake()
         { 
