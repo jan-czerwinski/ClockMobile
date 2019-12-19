@@ -114,7 +114,9 @@ namespace ClockMobile.ViewModels
         {
             try
             {
-                BleDevice = await Adapter.ConnectToKnownDeviceAsync(Guids.DeviceGuid, cancellationToken: cts.Token);
+                cts.CancelAfter(10000);
+                var deviceGuid = Device.RuntimePlatform == Device.Android ? Guids.DeviceOnAndroidGuid : Guids.DeviceOnIosGuid;
+                BleDevice = await Adapter.ConnectToKnownDeviceAsync(deviceGuid, cancellationToken: cts.Token);
                 Service = await BleDevice.GetServiceAsync(Guids.ServiceGuid);
                 SwitchCharacteristic = await Service.GetCharacteristicAsync(Guids.SwitchGuid);
                 BrightnessCharacteristic = await Service.GetCharacteristicAsync(Guids.BrightnessGuid);
@@ -129,9 +131,9 @@ namespace ClockMobile.ViewModels
                 
                 await NavigateToMainPage();
             }
-            catch (DeviceConnectionException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(e);
                 await userDialogs.AlertAsync("Nie można połączyć z zegarem.");
             }
         }

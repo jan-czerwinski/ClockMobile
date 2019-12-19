@@ -12,7 +12,8 @@
     <ContentPage.Content>
 
         <AbsoluteLayout>
-            <StackLayout AbsoluteLayout.LayoutBounds="0.05,0.05,1,0.35" AbsoluteLayout.LayoutFlags="All">
+            
+                <StackLayout AbsoluteLayout.LayoutBounds="0,0.05,1,0.35" AbsoluteLayout.LayoutFlags="All">
                 <Label HorizontalOptions="CenterAndExpand" Text="Jasność: " />
                 <Slider
                     Maximum="255"
@@ -27,7 +28,7 @@
                         HorizontalOptions="FillAndExpand"
                         Text="Tryb nocny"
                         VerticalOptions="CenterAndExpand" />
-                    <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.Brightness.NightMode}">
+                    <Switch HorizontalOptions="End" IsToggled="{Binding Clock.Brightness.NightMode}">
                         <Switch.Behaviors>
                             <b:EventToCommandBehavior Command="{Binding SendBrightnessCommand}" EventName="Toggled" />
                         </Switch.Behaviors>
@@ -50,12 +51,12 @@
             </StackLayout>
 
             <StackLayout
-                AbsoluteLayout.LayoutBounds="1,.45,1,0.2"
                 AbsoluteLayout.LayoutFlags="All"
+                AbsoluteLayout.LayoutBounds="1,.5,1,0.35"
                 HorizontalOptions="FillAndExpand">
                 <Label HorizontalOptions="CenterAndExpand" Text="Kolor:" />
-                <Grid Padding="1" BackgroundColor="Black">
-                    <BoxView Color="{Binding Clock.Color.HexColor}" />
+                <Grid Padding="1" BackgroundColor="Black" HeightRequest="50">
+                    <BoxView HeightRequest="50" Color="{Binding Clock.Color.HexColor}" />
                 </Grid>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="R:" TextColor="Red" />
@@ -94,6 +95,7 @@
                     </Slider>
                 </StackLayout>
             </StackLayout>
+            
 
             <StackLayout AbsoluteLayout.LayoutBounds="1,.85,1,0.1" AbsoluteLayout.LayoutFlags="All">
                 <Button
@@ -102,6 +104,7 @@
                     BorderRadius="10"
                     BorderWidth="1"
                     Command="{Binding PlaySnakeCommand}"
+                    TextColor="Black"
                     Text="zagraj w węża" />
             </StackLayout>
 
@@ -113,7 +116,7 @@
                     HorizontalOptions="FillAndExpand"
                     Text="Włącz/Wyłącz"
                     VerticalOptions="CenterAndExpand" />
-                <Switch HorizontalOptions="FillAndExpand" IsToggled="{Binding Clock.On}">
+                <Switch IsToggled="{Binding Clock.On}" HorizontalOptions="End">
                     <Switch.Behaviors>
                         <b:EventToCommandBehavior Command="{Binding SendSwitchCommand}" EventName="Toggled" />
                     </Switch.Behaviors>
