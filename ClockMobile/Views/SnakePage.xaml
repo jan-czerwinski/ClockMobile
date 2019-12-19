@@ -19,7 +19,8 @@
                 BorderWidth="1"
                 Command="{Binding TurnLeftCommand}"
                 FontSize="100"
-                Text="↑" />
+                Text="↑"
+                TextColor="Black" />
             <Button
                 AbsoluteLayout.LayoutBounds=".06,.98,0.6,0.4"
                 AbsoluteLayout.LayoutFlags="All"
@@ -29,7 +30,8 @@
                 BorderWidth="1"
                 Command="{Binding TurnRightCommand}"
                 FontSize="100"
-                Text="↓" />
+                Text="↓"
+                TextColor="Black" />
 
             <Button
                 AbsoluteLayout.LayoutBounds=".95,.5,.3,.1"
@@ -40,7 +42,8 @@
                 BorderWidth="1"
                 Command="{Binding StopSnakeCommand}"
                 Rotation="90"
-                Text="wyjdz" />
+                Text="wyjdz"
+                TextColor="Black" />
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
